@@ -17,10 +17,10 @@ class  hCard_widget extends WP_Widget {
 	    parent::WP_Widget(false, $name = 'hCard Widget');	
 	    }
     function form_arg(){
-		return array('title','main_class' ,'name_class','given_name','given_name_class','middle_name','middle_name_class','family_name'
-		,'family_name_class','organization','organization_class','email','email_class','address_class','street_address','street_address_class',
+		return array('title','main_class' ,'name_class', 'name_block_class','name_url','given_name','middle_name','family_name'
+		,'organization','organization_class','email','email_class','address_class','street_address','street_address_class',
 		'locality_address','locality_address_class','region_address','region_address_class','postal_address','postal_address_class','country_address',
-		'country_address_class','tel','tel_class','website','website_class','fax','fax_class');
+		'country_address_class','tel','tel_class','website','website_class','fax','fax_class', 'org_url');
 	    }
     /** @see WP_Widget::widget -- do not rename this */
     function widget($args, $instance) {	
@@ -38,13 +38,13 @@ class  hCard_widget extends WP_Widget {
 
 			<div id="hcard" class="vcard <?php echo $main_class;?>">
 				    <span class="fn n <?php echo $name_class;?>">
-					<span class="given-name <?php echo $given_name_class;?>"> <?php echo $given_name;?></span>
+					<a class="url" href="<?php echo $name_url;?><span class="given-name <?php echo $given_name_class;?>"> <?php echo $given_name;?></span>
 					<span class="additional-name <?php echo $middle_name_class;?>"> <?php echo $middle_name;?></span>
-					<span class="family-name <?php echo $family_name_class;?>"> <?php echo $family_name;?></span>
+					<span class="family-name <?php echo $family_name_class;?>"> <?php echo $family_name;?></span></a>
 				    </span>
-				    <div class="org <?php echo $organization_class;?>"> <?php echo $organization;?></div>
-				    <div class="<?php echo $fax_class;?>"><?php echo $fax;?></div>
-				    <a class="email<?php echo $email_class;?>" href="mailto:<?php echo $email;?>"><?php echo $email;?></a>
+				    <div class="fn org <?php echo $organization_class;?>"><a class="url" href="<?php echo $org_url;?>"> <?php echo $organization;?></a></div>
+				    
+				    <span class="email <?php echo $email_class;?>"><a href="mailto:<?php echo $email;?>"><?php echo $email;?></a></span><br>
 				    <a class="url <?php echo $website_class;?>" href="<?php echo $website;?>"><?php echo $website;?></a>
 				    <div class="adr <?php echo $address_class;?>">
 					<div class="street-address <?php echo $street_address_class;?>"> <?php echo $street_address;?></div>
@@ -52,11 +52,12 @@ class  hCard_widget extends WP_Widget {
 					, 
 					<span class="region <?php echo $region_address_class;?>"> <?php echo $region_address;?></span>
 					, 
-					<span class="postal-code <?php echo $postal_address_class;?>"> <?php echo $postal_address;?></span>
+					<span class="postal-code <?php echo $postal_address_class;?>"> <?php echo $postal_address;?></span><br>
 
 					<span class="country-name <?php echo $country_address_class;?>"> <?php echo $country_address;?></span>
 				    </div>
-				    <div class="tel <?php echo $tel_class;?>"> <?php echo $tel;?></div>
+				    <div class="tel <?php echo $tel_class;?>"><?php echo $tel;?></div>
+					<div class="tel <?php echo $fax_class;?>"><?php echo $fax;?></div>
 			</div>
        <?php echo $after_widget;
        }
@@ -82,7 +83,7 @@ class  hCard_widget extends WP_Widget {
         foreach($array as $val)
 			
          $instance[$val]=strip_tags($new_instance[$val]);
-        //if(in_array('',$new_instance) || !$this->validateEmail($instance['email']) || !$this->isValidURL($instance['website'])) {$instance['error']=true;return $instance;}
+        //if(in_array('',$new_instance) || !$this->validateEmail($instance['email']) || !$this->isValidURL($instance['website'] || !$this->isValidURL($instance['org_url']) ||  !$this->isValidURL($instance['name_url']) {$instance['error']=true;return $instance;}
 		return $instance;
     }
  
@@ -118,8 +119,8 @@ class  hCard_widget extends WP_Widget {
 		<td>
 		    <table>
 			<tr>
-			    <label>Name Class:</label>
-			    <td><input type="text" name="<?php echo $this->get_field_name('name_class'); ?>"  value="<?php echo $name_class;?>" /></td>
+			    <label>Name Block Class:</label>
+			    <td><input type="text" name="<?php echo $this->get_field_name('name_block_class'); ?>"  value="<?php echo $name_class;?>" /></td>
 			</tr>
 		    </table>
 		</td>
@@ -135,43 +136,22 @@ class  hCard_widget extends WP_Widget {
 			    <td><input type="text" size="13px" name="<?php echo $this->get_field_name('given_name'); ?>"  value="<?php echo $given_name;?>" /></td>
 			</tr>
 			<tr>
-			    <td><label>Class:</label></td>
-			    <td><input type="text" size="13px" name="<?php echo $this->get_field_name('given_name_class'); ?>"  value="<?php echo $given_name_class;?>" /></td>
-			</tr>
-		    </table>
-		</td>
-	    </tr>
-	     <tr>
-		    <td><hr /></td>
-	    </tr>
-	    <tr>
-		<td>
-		    <table>
-			<tr>
+			    
 			    <td><label>Middle Name:</label></td>
 			    <td><input type="text" size="13px" name="<?php echo $this->get_field_name('middle_name'); ?>"  value="<?php echo $middle_name;?>" /></td>
 			</tr>
-			<tr>
-			    <td><label>Class:</label></td>
-			    <td><input type="text" size="13px"   name="<?php echo $this->get_field_name('middle_name_class'); ?>"  value="<?php echo $middle_name_class;?>" /></td>
-			</tr>
-		    </table>
-		</td>
-	    </tr>
-	     <tr>
-		    <td><hr /></td>
-	    </tr>
-	    <tr>
-		<td>
-		    <table>
+			
 			<tr>
 			    <td><label>Family Name:</label></td>
 			    <td><input type="text" size="13px"  name="<?php echo $this->get_field_name('family_name'); ?>"  value="<?php echo $family_name;?>" /></td>
 			</tr>
 			<tr>
 			    <td><label>Class: </label></td>
-			    <td><input type="text"  size="13px"  name="<?php echo $this->get_field_name('family_name_class'); ?>"  value="<?php echo $family_name_class;?>" /></td>
+			    <td><input type="text"  size="13px"  name="<?php echo $this->get_field_name('name_class'); ?>"  value="<?php echo $family_name_class;?>" /></td>
 			</tr>
+			<tr>
+			<td><label>URL:</label></td>
+			<td> <input type="text" size="13px"  name="<?php echo $this->get_field_name('name_url'); ?>"  value="<?php echo $name_url;?>" /></td>
 		    </table>
 		</td>
 	    </tr>
@@ -189,6 +169,9 @@ class  hCard_widget extends WP_Widget {
 			    <td><label>Class:</label></td>
 			    <td><input type="text"  size="13px"  name="<?php echo $this->get_field_name('organization_class'); ?>"  value="<?php echo $organization_class;?>" /></td>
 			</tr>
+			<tr>
+			<td><label>URL:</label></td>
+			<td><input type="text" size="13px" name="org_url" value="<?php echo $org_url;?>" /></td>
 		    </table>
 		</td>
 	    </tr>
